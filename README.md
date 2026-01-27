@@ -7,16 +7,16 @@
   <!--<sup>
   <font color=brightred>
 
-  ## !!! [Important Update](#latestupdate) !!!<br>Don't forget to add the Node again in existing workflows
+  ## !!! [重要な更新](#latestupdate) !!!<br>既存のワークフローにノードを再追加するのを忘れずに
   
   </font>
   </sup>-->
   
   <a href="https://boosty.to/artgourieff" target="_blank">
-    <img src="https://lovemet.ru/img/boosty.jpg" width="108" alt="Support Me on Boosty"/>
+    <img src="https://lovemet.ru/img/boosty.jpg" width="108" alt="Boosty で支援"/>
     <br>
     <sup>
-      Support This Project
+      このプロジェクトを支援
     </sup>
   </a>
 
@@ -31,60 +31,87 @@
   [![Closed issues](https://img.shields.io/github/issues-closed/Gourieff/ComfyUI-ReActor?color=green&cacheSeconds=0)](https://github.com/Gourieff/ComfyUI-ReActor/issues?q=is%3Aissue+state%3Aclosed)
   ![License](https://img.shields.io/github/license/Gourieff/ComfyUI-ReActor)
 
-  English | [Русский](/README_RU.md)
+  日本語 | [Русский](/README_RU.md)
 
-# ReActor Nodes for ComfyUI
+# ComfyUI 用 ReActor ノード
 
 </div>
 
-### The Fast and Simple Face Swap Extension Nodes for ComfyUI, based on [blocked ReActor](https://web.archive.org/web/20241230084620/https://github.com/Gourieff/comfyui-reactor-node)
+### [ブロックされた ReActor](https://web.archive.org/web/20241230084620/https://github.com/Gourieff/comfyui-reactor-node) をベースにした、ComfyUI 向けの高速で簡単なフェイススワップ拡張ノード
 
-> By using this Node you accept and assume [responsibility](#disclaimer)
+> このノードを使用することで、[責任](#disclaimer)に同意し、受諾したものとみなされます。
 
 <div align="center">
 
 ---
-[**What's new**](#latestupdate) | [**Installation**](#installation) | [**Usage**](#usage) | [**Troubleshooting**](#troubleshooting) | [**Updating**](#updating) | [**Disclaimer**](#disclaimer) | [**Credits**](#credits) | [**Note!**](#note)
+[**最新情報**](#latestupdate) | [**インストール**](#installation) | [**使い方**](#usage) | [**トラブルシューティング**](#troubleshooting) | [**更新**](#updating) | [**免責事項**](#disclaimer) | [**クレジット**](#credits) | [**注意!**](#note)
 
 ---
 
 </div>
 
+## クイックスタート
+
+とりあえず動かすための最短手順と、よく使う基本設定の概要です。
+
+### 最短手順（ざっくり）
+
+1. **インストール**（[インストール](#installation) を参照）
+2. **モデル配置**（[モデル](#models) を参照）
+3. **ComfyUI でノードを追加**
+   - メニュー `ReActor` から `ReActorFaceSwap` を追加
+4. **最低限の接続**
+   - `input_image`（ターゲット画像）
+   - `source_image`（差し替える顔画像）
+5. **実行して結果を確認**
+
+### 基本設定のポイント
+
+- **顔の順序（インデックス）**
+  - デフォルトは大きい顔から順に検出します。順序を変えたい場合は `ReActorFaceSwapOpt` + `ReActorOptions` を使ってください。
+  - 特定の顔だけを指定したい場合は `source_image` と `input_image` それぞれのインデックスを指定します（例: `0,1,2`）。
+- **フェイススワップ強度**
+  - `ReActorSetWeight` で強度を 0〜100%（12.5%刻み）で調整できます。
+- **フェイス復元**
+  - 復元モデルを用意すれば、スワップ後の顔を高品質化できます。モデル配置は [モデル](#models) を参照してください。
+- **マスク（精度重視）**
+  - `ReActorMaskHelper` を使うと、顔の切り抜き精度が上がります。精度優先のときにおすすめです。
+
 <a name="latestupdate">
 
-## What's new in the latest update
+## 最新アップデート情報
 
 ### 0.6.2 <sub><sup>BETA1</sup></sub>
 
-- Added support of HyperSwap models by FaceFusion Labs (thanks [@Buumcode](https://github.com/Buumcode) for contribution)<br>You can download them [here](https://huggingface.co/facefusion/models-3.3.0/tree/main)<br>(hyperswap_1a_256.onnx, hyperswap_1b_256.onnx, hyperswap_1c_256.onnx)<br>and put them into the `ComfyUI\models\hyperswap` directory
+- FaceFusion Labs の HyperSwap モデルに対応（貢献してくれた [@Buumcode](https://github.com/Buumcode) に感謝）<br>[こちら](https://huggingface.co/facefusion/models-3.3.0/tree/main)からダウンロードできます。<br>(hyperswap_1a_256.onnx, hyperswap_1b_256.onnx, hyperswap_1c_256.onnx)<br>`ComfyUI\models\hyperswap` ディレクトリに配置してください。
 
 <center>
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.6.2-whatsnew-04-3.jpg?raw=true" alt="0.6.2-whatsnew-04-3" width="100%"/>
 </center>
 
-[Comparison grid](https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.6.2_swapmodels_compare.png) of Inswapper vs Reswapper vs HyperSwap
+Inswapper / Reswapper / HyperSwap の[比較グリッド](https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.6.2_swapmodels_compare.png)
 
-- Fixes and improvements
+- 修正と改善
 
 ### 0.6.2 <sub><sup>ALPHA2, ALPHA3, ALPHA4</sup></sub>
 
-- Small but important fixes
+- 小さいながら重要な修正
 
 ### 0.6.2 <sub><sup>ALPHA1</sup></sub>
 
-- [Experimental] At last! Face restoration process affects only swapped faces
+- [実験的] ついに！フェイス復元が交換された顔のみに適用されます。
 
 <center>
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.6.2-whatsnew-01.jpg?raw=true" alt="0.6.2-whatsnew-01" width="100%"/>
 </center>
 
-- [Experimental] New Node "Restore Face Advanced" with Face Restore Filter, thanks https://github.com/Buumcode for implementation of "Restore Face Filter"<br>This node helps you apply the restoration process to the face(s) you need
+- [実験的] 新ノード「Restore Face Advanced」とフェイス復元フィルターを追加（"Restore Face Filter" の実装に感謝 https://github.com/Buumcode）<br>このノードで、必要な顔だけに復元プロセスを適用できます。
 
 <center>
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.6.2-whatsnew-02.jpg?raw=true" alt="0.6.2-whatsnew-02" width="100%"/>
 </center>
 
-- Added FACE_MODEL_NAME output for "Load Face Model" node
+- 「Load Face Model」ノードに FACE_MODEL_NAME 出力を追加
 
 <center>
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.6.2-whatsnew-03.jpg?raw=true" alt="0.6.2-whatsnew-03" width="50%"/>
@@ -92,15 +119,15 @@
 
 ### 0.6.1
 
-- Gender detection better logic for many faces and many indexes
-- MaskHelper node 2x speed up - not perfect yet but 1.5x-2x faster then before
-- ComfyUI native ProgressBar for different steps
-- ORIGINAL_IMAGE output for main nodes
-- Different fixes and improvements (https://github.com/Gourieff/ComfyUI-ReActor/issues/25 fix)
+- 複数顔・複数インデックス向けの性別検出ロジックを改善
+- MaskHelper ノードを 2 倍高速化（まだ完璧ではありませんが、従来より 1.5〜2 倍高速）
+- 各ステップで ComfyUI のネイティブ ProgressBar を使用
+- メインノードに ORIGINAL_IMAGE 出力を追加
+- 各種修正と改善（https://github.com/Gourieff/ComfyUI-ReActor/issues/25 の修正）
 
 ### 0.6.0
 
-- New Node `ReActorSetWeight` - you can now set the strength of face swap for `source_image` or `face_model` from 0% to 100% (in 12.5% step)
+- 新ノード `ReActorSetWeight` を追加。`source_image` または `face_model` のフェイススワップ強度を 0%〜100% まで（12.5%刻み）指定可能。
 
 <center>
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.6.0-whatsnew-01.jpg?raw=true" alt="0.6.0-whatsnew-01" width="100%"/>
@@ -109,363 +136,361 @@
 </center>
 
 <details>
-	<summary><a>Previous versions</a></summary>
+	<summary><a>過去のバージョン</a></summary>
 
 ### 0.5.2
 
-- ReSwapper models support. Although Inswapper still has the best similarity, but ReSwapper is evolving - thanks @somanchiu https://github.com/somanchiu/ReSwapper for the ReSwapper models and the ReSwapper project! This is a good step for the Community in the Inswapper's alternative creation!
+- ReSwapper モデルに対応。Inswapper が最も類似性が高いものの、ReSwapper は進化中です。@somanchiu https://github.com/somanchiu/ReSwapper の ReSwapper モデルとプロジェクトに感謝！Inswapper の代替をコミュニティで作る大きな一歩です！
 
 <center>
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.2-whatsnew-03.jpg?raw=true" alt="0.5.2-whatsnew-03" width="75%"/>
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.2-whatsnew-04.jpg?raw=true" alt="0.5.2-whatsnew-04" width="75%"/>
 </center>
 
-You can download ReSwapper models here:
+ReSwapper モデルはこちらからダウンロードできます:
 https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models
-Just put them into the "models/reswapper" directory.
+"models/reswapper" ディレクトリに配置してください。
 
-- New node "Unload ReActor Models" - is useful for complex WFs when you need to free some VRAM utilized by ReActor
+- 新ノード「Unload ReActor Models」追加。複雑なワークフローで ReActor が使用する VRAM を解放したいときに便利です。
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.2-whatsnew-01.jpg?raw=true" alt="0.5.2-whatsnew-01" width="100%"/>
 
-- Support of ORT CoreML and ROCM EPs, just install onnxruntime version you need
-- Install script improvements to install latest versions of ORT-GPU
+- ORT CoreML と ROCM EP をサポート（必要な onnxruntime をインストールしてください）
+- ORT-GPU の最新バージョンをインストールするためのインストールスクリプトを改善
 
 <center>
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.2-whatsnew-02.jpg?raw=true" alt="0.5.2-whatsnew-02" width="50%"/>
 </center>
 
-- Fixes and improvements
+- 修正と改善
 
 
 ### 0.5.1
 
-- Support of GPEN 1024/2048 restoration models (available in the HF dataset https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models/facerestore_models)
-- ReActorFaceBoost Node - an attempt to improve the quality of swapped faces. The idea is to restore and scale the swapped face (according to the `face_size` parameter of the restoration model) BEFORE pasting it to the target image (via inswapper algorithms), more information is [here (PR#321)](https://github.com/Gourieff/comfyui-reactor-node/pull/321)
+- GPEN 1024/2048 復元モデルに対応（HF データセット https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models/facerestore_models）
+- ReActorFaceBoost ノード：スワップされた顔の品質を向上させる試み。`face_size` パラメータに応じて復元＋スケールを行い、inswapper アルゴリズムでターゲットに貼り付けます。詳細は [PR#321](https://github.com/Gourieff/comfyui-reactor-node/pull/321) を参照してください。
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.1-whatsnew-01.jpg?raw=true" alt="0.5.1-whatsnew-01" width="100%"/>
 
-[Full size demo preview](https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.1-whatsnew-02.png)
+[フルサイズのデモプレビュー](https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.1-whatsnew-02.png)
 
-- Sorting facemodels alphabetically
-- A lot of fixes and improvements
+- フェイスモデルのアルファベット順ソート
+- 多数の修正と改善
 
 ### [0.5.0 <sub><sup>BETA4</sup></sub>](https://web.archive.org/web/20241127121952/https://github.com/Gourieff/comfyui-reactor-node/releases/tag/v0.5.0)
 
-- Spandrel lib support for GFPGAN
+- GFPGAN 用 Spandrel ライブラリ対応
 
 ### 0.5.0 <sub><sup>BETA3</sup></sub>
 
-- Fixes: "RAM issue", "No detection" for MaskingHelper
+- 修正：「RAM issue」「No detection」(MaskingHelper)
 
 ### 0.5.0 <sub><sup>BETA2</sup></sub>
 
-- You can now build a blended face model from a batch of face models you already have, just add the "Make Face Model Batch" node to your workflow and connect several models via "Load Face Model"
-- Huge performance boost of the image analyzer's module! 10x speed up! Working with videos is now a pleasure!
+- 既存のフェイスモデルのバッチからブレンドフェイスモデルを作成可能に。"Make Face Model Batch" を追加し、"Load Face Model" で複数モデルを接続してください。
+- 画像アナライザーのモジュールで大幅な性能向上！10倍高速化。動画の処理が快適に！
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.0-whatsnew-05.png?raw=true" alt="0.5.0-whatsnew-05" width="100%"/>
 
 ### 0.5.0 <sub><sup>BETA1</sup></sub>
 
-- SWAPPED_FACE output for the Masking Helper Node
-- FIX: Empty A-channel for Masking Helper IMAGE output (causing errors with some nodes) was removed
+- Masking Helper ノードに SWAPPED_FACE 出力を追加
+- 修正：Masking Helper の IMAGE 出力の A チャンネルが空になる問題を解消
 
 ### 0.5.0 <sub><sup>ALPHA1</sup></sub>
 
-- ReActorBuildFaceModel Node got "face_model" output to provide a blended face model directly to the main Node:
+- ReActorBuildFaceModel ノードに "face_model" 出力を追加し、ブレンドフェイスモデルをメインノードへ直接渡せるように。
 
-Basic workflow [💾](https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/workflows/ReActor--Build-Blended-Face-Model--v2.json)
+基本ワークフロー [💾](https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/workflows/ReActor--Build-Blended-Face-Model--v2.json)
 
-- Face Masking feature is available now, just add the "ReActorMaskHelper" Node to the workflow and connect it as shown below:
+- フェイスマスク機能が利用可能に。"ReActorMaskHelper" を追加し、以下のように接続してください。
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.0-whatsnew-01.jpg?raw=true" alt="0.5.0-whatsnew-01" width="100%"/>
 
-If you don't have the "face_yolov8m.pt" Ultralytics model - you can download it from the [Assets](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/detection/bbox/face_yolov8m.pt) and put it into the "ComfyUI\models\ultralytics\bbox" directory
-<br>
-As well as ["sam_vit_b_01ec64.pth"](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/sams/sam_vit_b_01ec64.pth) model - download (if you don't have it) and put it into the "ComfyUI\models\sams" directory;
+"face_yolov8m.pt" Ultralytics モデルがない場合は、[Assets](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/detection/bbox/face_yolov8m.pt) からダウンロードして "ComfyUI\models\ultralytics\bbox" に配置してください。<br>
+または ["sam_vit_b_01ec64.pth"](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/sams/sam_vit_b_01ec64.pth) をダウンロードして "ComfyUI\models\sams" に配置してください。
 
-Use this Node to gain the best results of the face swapping process:
+このノードを使うとフェイススワップの結果を最大限に引き出せます：
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.0-whatsnew-02.jpg?raw=true" alt="0.5.0-whatsnew-02" width="100%"/>
 
-- ReActorImageDublicator Node - rather useful for those who create videos, it helps to duplicate one image to several frames to use them with VAE Encoder (e.g. live avatars):
+- ReActorImageDublicator ノード：動画を作る人向け。1枚の画像を複数フレームに複製して VAE エンコーダに渡せます（例：ライブアバター）。
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.0-whatsnew-03.jpg?raw=true" alt="0.5.0-whatsnew-03" width="100%"/>
 
-- ReActorFaceSwapOpt (a simplified version of the Main Node) + ReActorOptions Nodes to set some additional options such as (new) "input/source faces separate order". Yes! You can now set the order of faces in the index in the way you want ("large to small" goes by default)!
+- ReActorFaceSwapOpt（メインノードの簡易版）と ReActorOptions ノードで追加オプション（新しい "input/source faces separate order"）を設定可能。インデックス順序を自由に指定できます（デフォルトは "大きい順"）。
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.0-whatsnew-04.jpg?raw=true" alt="0.5.0-whatsnew-04" width="100%"/>
 
-- Little speed boost when analyzing target images (unfortunately it is still quite slow in compare to swapping and restoring...)
+- ターゲット画像解析の速度を少し向上（ただし、スワップや復元に比べるとまだ遅い）
 
 ### [0.4.2](https://web.archive.org/web/20241127034727/https://github.com/Gourieff/comfyui-reactor-node/releases/tag/v0.4.2)
 
-- GPEN-BFR-512 and RestoreFormer_Plus_Plus face restoration models support
+- GPEN-BFR-512 と RestoreFormer_Plus_Plus のフェイス復元モデルに対応
 
-You can download models here: https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models/facerestore_models
-<br>Put them into the `ComfyUI\models\facerestore_models` folder
+モデルは https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models/facerestore_models からダウンロードできます。<br>`ComfyUI\models\facerestore_models` に配置してください。
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.4.2-whatsnew-04.jpg?raw=true" alt="0.4.2-whatsnew-04" width="100%"/>
 
-- Due to popular demand - you can now blend several images with persons into one face model file and use it with "Load Face Model" Node or in SD WebUI as well;
+- 要望により、複数の人物画像を 1 つのフェイスモデルにブレンド可能に。
 
-Experiment and create new faces or blend faces of one person to gain better accuracy and likeness!
-
-Just add the ImpactPack's "Make Image Batch" Node as the input to the ReActor's one and load images you want to blend into one model:
+ImpactPack の "Make Image Batch" ノードを ReActor の入力に接続し、複数画像をブレンドしてください。
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.4.2-whatsnew-01.jpg?raw=true" alt="0.4.2-whatsnew-01" width="100%"/>
 
-Result example (the new face was created from 4 faces of different actresses):
+結果例（4 人の女優の顔から作成された新しい顔）:
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.4.2-whatsnew-02.jpg?raw=true" alt="0.4.2-whatsnew-02" width="75%"/>
 
-Basic workflow [💾](https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/workflows/ReActor--Build-Blended-Face-Model--v1.json)
+基本ワークフロー [💾](https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/workflows/ReActor--Build-Blended-Face-Model--v1.json)
 
 ### [0.4.1](https://web.archive.org/web/20241127044707/https://github.com/Gourieff/comfyui-reactor-node/releases/tag/v0.4.1)
 
-- CUDA 12 Support - don't forget to run (Windows) `install.bat` or (Linux/MacOS) `install.py` for ComfyUI's Python enclosure or try to install ORT-GPU for CU12 manually (https://onnxruntime.ai/docs/install/#install-onnx-runtime-gpu-cuda-12x)
-- Issue [comfyui-reactor-node/issues/173](https://web.archive.org/web/20240919043728/https://github.com/Gourieff/comfyui-reactor-node/issues/173) fix
+- CUDA 12 をサポート。（Windows）`install.bat` または（Linux/MacOS）`install.py` を ComfyUI の Python 環境で実行するか、CU12 用 ORT-GPU を手動でインストールしてください (https://onnxruntime.ai/docs/install/#install-onnx-runtime-gpu-cuda-12x)
+- Issue [comfyui-reactor-node/issues/173](https://web.archive.org/web/20240919043728/https://github.com/Gourieff/comfyui-reactor-node/issues/173) の修正
 
-- Separate Node for the Face Restoration postprocessing (FR [comfyui-reactor-node/issues/191](https://web.archive.org/web/20241127040848/https://github.com/Gourieff/comfyui-reactor-node/issues/191)), can be found inside ReActor's menu (RestoreFace Node)
-- (Windows) Installation can be done for Python from the System's PATH
-- Different fixes and improvements
+- フェイス復元の後処理用に専用ノードを追加（FR [comfyui-reactor-node/issues/191](https://web.archive.org/web/20241127040848/https://github.com/Gourieff/comfyui-reactor-node/issues/191)）。ReActor メニュー内に「RestoreFace Node」として表示されます。
+- (Windows) Python がシステム PATH にある環境でもインストール可能
+- その他の修正・改善
 
-- Face Restore Visibility and CodeFormer Weight (Fidelity) options are now available! Don't forget to reload the Node in your existing workflow
+- Face Restore Visibility と CodeFormer Weight (Fidelity) を追加。既存ワークフローではノードを再読み込みしてください。
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.4.1-whatsnew-01.jpg?raw=true" alt="0.4.1-whatsnew-01" width="100%"/>
 
 ### [0.4.0](https://web.archive.org/web/20241119155323/https://github.com/Gourieff/comfyui-reactor-node/releases/tag/v0.4.0)
 
-- Input "input_image" goes first now, it gives a correct bypass and also it is right to have the main input first;
-- You can now save face models as "safetensors" files (`ComfyUI\models\reactor\faces`) and load them into ReActor implementing different scenarios and keeping super lightweight face models of the faces you use:
+- 入力 "input_image" を先頭に変更。正しいバイパスが可能になり、メイン入力として扱えるようになりました。
+- フェイスモデルを "safetensors" 形式で保存可能に（`ComfyUI\models\reactor\faces`）。さまざまなシナリオで軽量なフェイスモデルを使えます。
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.4.0-whatsnew-01.jpg?raw=true" alt="0.4.0-whatsnew-01" width="100%"/>
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.4.0-whatsnew-02.jpg?raw=true" alt="0.4.0-whatsnew-02" width="100%"/>
 
-- Ability to build and save face models directly from an image:
+- 画像から直接フェイスモデルを作成可能に。
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.4.0-whatsnew-03.jpg?raw=true" alt="0.4.0-whatsnew-03" width="50%"/>
 
-- Both the inputs are optional, just connect one of them according to your workflow; if both is connected - `image` has a priority.
-- Different fixes making this extension better.
+- 両方の入力はオプションで、どちらか 1 つを接続すれば OK。両方接続した場合は `image` が優先。
+- 各種修正で拡張を改善。
 
-Thanks to everyone who finds bugs, suggests new features and supports this project!
+バグ報告や機能提案、支援をしてくださる皆さんに感謝！
 
 </details>
 
-## Installation
+## インストール
 
 <details>
-	<summary>Standalone (Portable) <a href="https://github.com/comfyanonymous/ComfyUI">ComfyUI</a> for Windows</summary>
+	<summary>Windows 用 <a href="https://github.com/comfyanonymous/ComfyUI">ComfyUI</a>（Standalone/Portable）</summary>
 
-1. Do the following:
-   - Install [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) (Community version - you need this step to build Insightface)
-   - OR only [VS C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) and select "Desktop Development with C++" under "Workloads -> Desktop & Mobile"
-   - OR if you don't want to install VS or VS C++ BT - follow [this steps (sec. I)](#insightfacebuild)
-2. Choose between two options:
-   - (ComfyUI Manager) Open ComfyUI Manager, click "Install Custom Nodes", type "ReActor" in the "Search" field and then click "Install". After ComfyUI will complete the process - please restart the Server.
-   - (Manually) Go to `ComfyUI\custom_nodes`, open Console and run `git clone https://github.com/Gourieff/ComfyUI-ReActor`
-3. Go to `ComfyUI\custom_nodes\ComfyUI-ReActor` and run `install.bat`
-4. If you don't have the "face_yolov8m.pt" Ultralytics model - you can download it from the [Assets](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/detection/bbox/face_yolov8m.pt) and put it into the "ComfyUI\models\ultralytics\bbox" directory<br>As well as one or both of "Sams" models from [here](https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models/sams) - download (if you don't have them) and put into the "ComfyUI\models\sams" directory
-5. Run ComfyUI and find there ReActor Nodes inside the menu `ReActor` or by using a search
+1. 次のいずれかを実施:
+   - [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)（Community 版）をインストール（Insightface ビルドのために必要）
+   - もしくは [VS C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) をインストールし、「Desktop Development with C++」を選択
+   - もしくは VS/Build Tools を入れたくない場合は [この手順 (I. 節)](#insightfacebuild) を参照
+2. 2 つの方法のいずれかを選択:
+   - (ComfyUI Manager) ComfyUI Manager を開き、「Install Custom Nodes」をクリック。検索欄に「ReActor」を入力して「Install」。完了後、サーバーを再起動。
+   - (手動) `ComfyUI\custom_nodes` に移動し、コンソールで `git clone https://github.com/Gourieff/ComfyUI-ReActor` を実行
+3. `ComfyUI\custom_nodes\ComfyUI-ReActor` に移動し、`install.bat` を実行
+4. "face_yolov8m.pt" Ultralytics モデルがない場合は [Assets](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/detection/bbox/face_yolov8m.pt) からダウンロードして `ComfyUI\models\ultralytics\bbox` に配置してください。<br>同様に "Sams" モデルのいずれか（または両方）を [こちら](https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models/sams) からダウンロードし、`ComfyUI\models\sams` に配置してください。
+5. ComfyUI を起動し、メニュー `ReActor` または検索欄から ReActor ノードを探します。
 
 </details>
 
-## Models
+## モデル
 
- - buffalo_l: downloaded on first launch into `ComfyUI\models\insightface\models\buffalo_l`, or you can download manually from [here](https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models)
- - inswapper_128: downloaded during installation into `ComfyUI\models\insightface`, or you can download manually from [here](https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models)
- - reswapper_128/256: https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models put them into `ComfyUI\models\reswapper`
- - hyperswap_256: https://huggingface.co/facefusion/models-3.3.0/tree/main (hyperswap_1a_256.onnx, hyperswap_1b_256.onnx, hyperswap_1a_256.onnx) put them into `ComfyUI\models\hyperswap`
- - Face restoration models: https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models/facerestore_models put any you like into `ComfyUI\models\facerestore_models`
- - Ultralytics model: https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/detection/bbox/face_yolov8m.pt put into `ComfyUI\models\ultralytics\bbox`
- - SAM models: https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models/sams put into `ComfyUI\models\sams`
+ - buffalo_l: 初回起動時に `ComfyUI\models\insightface\models\buffalo_l` に自動ダウンロード、または [こちら](https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models) から手動ダウンロード
+ - inswapper_128: インストール時に `ComfyUI\models\insightface` にダウンロード、または [こちら](https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models) から手動ダウンロード
+ - reswapper_128/256: https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models を `ComfyUI\models\reswapper` に配置
+ - hyperswap_256: https://huggingface.co/facefusion/models-3.3.0/tree/main（hyperswap_1a_256.onnx, hyperswap_1b_256.onnx, hyperswap_1a_256.onnx）を `ComfyUI\models\hyperswap` に配置
+ - フェイス復元モデル: https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models/facerestore_models から好みのものを `ComfyUI\models\facerestore_models` に配置
+ - Ultralytics モデル: https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/detection/bbox/face_yolov8m.pt を `ComfyUI\models\ultralytics\bbox` に配置
+ - SAM モデル: https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models/sams を `ComfyUI\models\sams` に配置
 
-## Usage
+## 使い方
 
-You can find ReActor Nodes inside the menu `ReActor` or by using a search (just type "ReActor" in the search field)
+メニュー `ReActor` 内、または検索欄で "ReActor" と入力して ReActor ノードを探せます。
 
-List of Nodes:
-- ••• Main Nodes •••
-  - ReActorFaceSwap (Main Node)
-  - ReActorFaceSwapOpt (Main Node with the additional Options input)
-  - ReActorOptions (Options for ReActorFaceSwapOpt)
-  - ReActorFaceBoost (Face Booster Node)
-  - ReActorMaskHelper (Masking Helper)
-  - ReActorSetWeight (Set Face Swap Weight)
-- ••• Operations with Face Models •••
-  - ReActorSaveFaceModel (Save Face Model)
-  - ReActorLoadFaceModel (Load Face Model)
-  - ReActorBuildFaceModel (Build Blended Face Model)
-  - ReActorMakeFaceModelBatch (Make Face Model Batch)
-- ••• Additional Nodes •••
-  - ReActorRestoreFace (Face Restoration)
-  - ReActorImageDublicator (Dublicate one Image to Images List)
-  - ImageRGBA2RGB (Convert RGBA to RGB)
-  - ReActorUnload (Unload ReActor models from VRAM)
+ノード一覧:
+- ••• メインノード •••
+  - ReActorFaceSwap (メインノード)
+  - ReActorFaceSwapOpt (追加オプション入力付きメインノード)
+  - ReActorOptions (ReActorFaceSwapOpt 用オプション)
+  - ReActorFaceBoost (フェイスブースターノード)
+  - ReActorMaskHelper (マスキングヘルパー)
+  - ReActorSetWeight (フェイススワップ強度設定)
+- ••• フェイスモデル操作 •••
+  - ReActorSaveFaceModel (フェイスモデル保存)
+  - ReActorLoadFaceModel (フェイスモデル読み込み)
+  - ReActorBuildFaceModel (ブレンドフェイスモデル作成)
+  - ReActorMakeFaceModelBatch (フェイスモデルバッチ作成)
+- ••• 追加ノード •••
+  - ReActorRestoreFace (フェイス復元)
+  - ReActorImageDublicator (1枚の画像を複数枚に複製)
+  - ImageRGBA2RGB (RGBA を RGB に変換)
+  - ReActorUnload (VRAM から ReActor モデルを解放)
 
-Connect all required slots and run the query.
+必要なスロットを接続して実行してください。
 
-### Main Node Inputs
+### メインノードの入力
 
-- `input_image` - is an image to be processed (target image, analog of "target image" in the SD WebUI extension);
-  - Supported Nodes: "Load Image", "Load Video" or any other nodes providing images as an output;
-- `source_image` - is an image with a face or faces to swap in the `input_image` (source image, analog of "source image" in the SD WebUI extension);
-  - Supported Nodes: "Load Image" or any other nodes providing images as an output;
-- `face_model` - is the input for the "Load Face Model" Node or another ReActor node to provide a face model file (face embedding) you created earlier via the "Save Face Model" Node;
-  - Supported Nodes: "Load Face Model", "Build Blended Face Model";
-- `options` - to connect ReActorOptions;
-  - Supported Nodes: "ReActorOptions";
-- `face_boost` - to connect ReActorFaceBoost;
-  - Supported Nodes: "ReActorFaceBoost";
+- `input_image` - 処理対象の画像（SD WebUI の "target image" に相当）
+  - 対応ノード: "Load Image"、"Load Video"、または画像を出力する任意ノード
+- `source_image` - `input_image` にスワップする顔画像（SD WebUI の "source image" に相当）
+  - 対応ノード: "Load Image"、または画像を出力する任意ノード
+- `face_model` - "Load Face Model" ノード、または "Save Face Model" で作成したフェイスモデルファイルの入力
+  - 対応ノード: "Load Face Model"、"Build Blended Face Model"
+- `options` - ReActorOptions を接続
+  - 対応ノード: "ReActorOptions"
+- `face_boost` - ReActorFaceBoost を接続
+  - 対応ノード: "ReActorFaceBoost"
 
-### Main Node Outputs
+### メインノードの出力
 
-- `IMAGE` - is an output with the resulted image;
-  - Supported Nodes: any nodes which have images as an input;
-- `FACE_MODEL` - is an output providing a source face's model being built during the swapping process;
-  - Supported Nodes: "Save Face Model", "ReActor", "Make Face Model Batch";
-- `ORIGINAL_IMAGE` - `input_image` bypass;
+- `IMAGE` - 出力画像
+  - 対応ノード: 画像入力を受ける任意のノード
+- `FACE_MODEL` - スワップ処理中に作成されるソース顔のモデル
+  - 対応ノード: "Save Face Model"、"ReActor"、"Make Face Model Batch"
+- `ORIGINAL_IMAGE` - `input_image` のバイパス
 
-### Face Restoration
+### フェイス復元
 
-Since version 0.3.0 ReActor Node has a buil-in face restoration.<br>Just download the models you want (see [Installation](#installation) instruction) and select one of them to restore the resulting face(s) during the faceswap. It will enhance face details and make your result more accurate.
+バージョン 0.3.0 以降、ReActor ノードには組み込みのフェイス復元機能があります。<br>
+使用したいモデルをダウンロードし（[インストール](#installation) を参照）、フェイススワップ中に復元モデルを選択するだけです。顔のディテールが向上し、より正確な結果になります。
 
-### Face Indexes
+### フェイスインデックス
 
-By default ReActor detects faces in images from "large" to "small".<br>You can change this option by adding ReActorFaceSwapOpt node with ReActorOptions.
+デフォルトでは、ReActor は "大きい顔" から "小さい顔" の順に検出します。<br>
+ReActorFaceSwapOpt ノードと ReActorOptions で順序を変更できます。
 
-And if you need to specify faces, you can set indexes for source and input images.
+また、特定の顔を指定する場合は、ソース画像と入力画像のインデックスを指定してください。
 
-Index of the first detected face is 0.
+最初に検出された顔のインデックスは 0 です。
 
-You can set indexes in the order you need.<br>
-E.g.: 0,1,2 (for Source); 1,0,2 (for Input).<br>This means: the second Input face (index = 1) will be swapped by the first Source face (index = 0) and so on.
+必要な順番でインデックスを指定できます。<br>
+例: ソース 0,1,2 / 入力 1,0,2<br>
+→ 入力の 2 番目の顔（index=1）にソースの 1 番目の顔（index=0）が適用されます。
 
-### Genders
+### 性別
 
-You can specify the gender to detect in images.<br>
-ReActor will swap a face only if it meets the given condition.
+検出対象の性別を指定できます。<br>
+ReActor は条件を満たす顔のみをスワップします。
 
-### Face Models
+### フェイスモデル
 
-Since version 0.4.0 you can save face models as "safetensors" files (stored in `ComfyUI\models\reactor\faces`) and load them into ReActor implementing different scenarios and keeping super lightweight face models of the faces you use.
+バージョン 0.4.0 以降、フェイスモデルを "safetensors" 形式で保存できます（`ComfyUI\models\reactor\faces`）。
 
-To make new models appear in the list of the "Load Face Model" Node - just refresh the page of your ComfyUI web application.<br>
-(I recommend you to use ComfyUI Manager - otherwise you workflow can be lost after you refresh the page if you didn't save it before that).
+"Load Face Model" ノードに新しいモデルを表示するには、ComfyUI のページを更新してください。<br>
+（ComfyUI Manager を使うことを推奨します。未保存のワークフローがあると、リロードで失われることがあります。）
 
 ### Masking Helper
 
-Face Masking feature is available since version 0.5.0, just add the "ReActorMaskHelper" Node to the workflow and connect it as shown below:
+フェイスマスク機能は 0.5.0 以降で利用できます。"ReActorMaskHelper" をワークフローに追加し、以下のように接続してください：
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.0-whatsnew-01.jpg?raw=true" alt="0.5.0-whatsnew-01" width="100%"/>
 
-If you don't have the "face_yolov8m.pt" Ultralytics model - you can download it from the [Assets](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/detection/bbox/face_yolov8m.pt) and put it into the "ComfyUI\models\ultralytics\bbox" directory
-<br>
-As well as ["sam_vit_b_01ec64.pth"](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/sams/sam_vit_b_01ec64.pth) or ["sam_vit_l_0b3195.pth"](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/sams/sam_vit_l_0b3195.pth) (better occlusion) - download (if you don't have it) and put it into the "ComfyUI\models\sams" directory;
+"face_yolov8m.pt" Ultralytics モデルがない場合は、[Assets](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/detection/bbox/face_yolov8m.pt) からダウンロードして `ComfyUI\models\ultralytics\bbox` に配置してください。<br>
+または ["sam_vit_b_01ec64.pth"](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/sams/sam_vit_b_01ec64.pth) または ["sam_vit_l_0b3195.pth"](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/sams/sam_vit_l_0b3195.pth)（遮蔽が多い場合に有利）をダウンロードし、`ComfyUI\models\sams` に配置してください。
 
-Use this Node to gain the best results of the face swapping process:
+このノードを使用すると、フェイススワップの結果を最大限に引き出せます：
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.0-whatsnew-02.jpg?raw=true" alt="0.5.0-whatsnew-02" width="100%"/>
 
 ### Face Swap Weigth
 
-You can set the strength of face swap for `source_image` or `face_model` from 0% to 100% (in 12.5% step) with `ReActorSetWeight` node
+`ReActorSetWeight` ノードで `source_image` または `face_model` のフェイススワップ強度を 0%〜100%（12.5%刻み）で設定できます。
 
 <center>
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.6.0-whatsnew-01.jpg?raw=true" alt="0.6.0-whatsnew-01" width="100%"/>
 </center>
 
-## Troubleshooting
+## トラブルシューティング
 
 <a name="insightfacebuild">
 
-### **I. (For Windows users) If you still cannot build Insightface for some reasons or just don't want to install Visual Studio or VS C++ Build Tools - do the following:**
+### **I. (Windows ユーザー向け) Insightface のビルドに失敗する、または Visual Studio / VS C++ Build Tools を入れたくない場合**
 
-1. (ComfyUI Portable) From the root folder check the version of Python:<br>run CMD and type `python_embeded\python.exe -V`
-2. Download prebuilt Insightface package according to Python's version you see in the previous step: [for Python 3.10](https://github.com/Gourieff/Assets/raw/main/Insightface/insightface-0.7.3-cp310-cp310-win_amd64.whl), [for Python 3.11](https://github.com/Gourieff/Assets/raw/main/Insightface/insightface-0.7.3-cp311-cp311-win_amd64.whl), [for Python 3.12](https://github.com/Gourieff/Assets/raw/main/Insightface/insightface-0.7.3-cp312-cp312-win_amd64.whl), [for Python 3.13](https://github.com/Gourieff/Assets/raw/main/Insightface/insightface-0.7.3-cp313-cp313-win_amd64.whl) - and put into ComfyUI root folder if you use ComfyUI Portable
-3. Update your PIP:<br>
+1. （ComfyUI Portable）ルートフォルダで Python のバージョンを確認します:<br>CMD で `python_embeded\python.exe -V` を実行
+2. 上記で確認した Python バージョンに合った事前ビルドの Insightface をダウンロードし、ComfyUI のルートフォルダに配置してください（ComfyUI Portable の場合）:<br>
+   [Python 3.10 用](https://github.com/Gourieff/Assets/raw/main/Insightface/insightface-0.7.3-cp310-cp310-win_amd64.whl), [Python 3.11 用](https://github.com/Gourieff/Assets/raw/main/Insightface/insightface-0.7.3-cp311-cp311-win_amd64.whl), [Python 3.12 用](https://github.com/Gourieff/Assets/raw/main/Insightface/insightface-0.7.3-cp312-cp312-win_amd64.whl), [Python 3.13 用](https://github.com/Gourieff/Assets/raw/main/Insightface/insightface-0.7.3-cp313-cp313-win_amd64.whl)
+3. PIP を更新:<br>
    `python_embeded\python.exe -m pip install -U pip`
-4. Then install Insightface:
-  <br>(for 3.10) `python_embeded\python.exe -m pip install insightface-0.7.3-cp310-cp310-win_amd64.whl`
-  <br>(for 3.11) `python_embeded\python.exe -m pip install insightface-0.7.3-cp311-cp311-win_amd64.whl`
-  <br>(for 3.12) `python_embeded\python.exe -m pip install insightface-0.7.3-cp312-cp312-win_amd64.whl`
-  <br>(for 3.13) `python_embeded\python.exe -m pip install insightface-0.7.3-cp313-cp313-win_amd64.whl` 
-5. Enjoy!
+4. Insightface をインストール:
+  <br>(3.10) `python_embeded\python.exe -m pip install insightface-0.7.3-cp310-cp310-win_amd64.whl`
+  <br>(3.11) `python_embeded\python.exe -m pip install insightface-0.7.3-cp311-cp311-win_amd64.whl`
+  <br>(3.12) `python_embeded\python.exe -m pip install insightface-0.7.3-cp312-cp312-win_amd64.whl`
+  <br>(3.13) `python_embeded\python.exe -m pip install insightface-0.7.3-cp313-cp313-win_amd64.whl`
+5. 完了！
 
 ### **II. "AttributeError: 'NoneType' object has no attribute 'get'"**
 
-This error may occur if there's smth wrong with the model file `inswapper_128.onnx`
+このエラーは `inswapper_128.onnx` モデルファイルが壊れている場合に発生することがあります。
 
-Try to download it manually from [here](https://huggingface.co/datasets/Gourieff/ReActor/resolve/main/models/inswapper_128.onnx)
-and put it to the `ComfyUI\models\insightface` replacing existing one
+[こちら](https://huggingface.co/datasets/Gourieff/ReActor/resolve/main/models/inswapper_128.onnx)から手動でダウンロードし、`ComfyUI\models\insightface` の既存ファイルと置き換えてください。
 
 ### **III. "reactor.execute() got an unexpected keyword argument 'reference_image'"**
 
-This means that input points have been changed with the latest update<br>
-Remove the current ReActor Node from your workflow and add it again
+最新アップデートで入力ポイントが変更されたことを示します。<br>
+現在の ReActor ノードをワークフローから削除し、再追加してください。
 
-### **IV. ControlNet Aux Node IMPORT failed error when using with ReActor Node**
+### **IV. ReActor ノードと使用時に ControlNet Aux Node の IMPORT 失敗エラー**
 
-1. Close ComfyUI if it runs
-2. Go to the ComfyUI root folder, open CMD there and run:
+1. ComfyUI を終了
+2. ComfyUI のルートフォルダで CMD を開き、以下を実行:
    - `python_embeded\python.exe -m pip uninstall -y opencv-python opencv-contrib-python opencv-python-headless`
    - `python_embeded\python.exe -m pip install opencv-python==4.7.0.72`
-3. That's it!
+3. 以上です！
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/uploads/reactor-w-controlnet.png?raw=true" alt="reactor+controlnet" />
 
-### **V. "ModuleNotFoundError: No module named 'basicsr'" or "subprocess-exited-with-error" during future-0.18.3 installation**
+### **V. "ModuleNotFoundError: No module named 'basicsr'" または future-0.18.3 インストール時の "subprocess-exited-with-error"**
 
-- Download https://github.com/Gourieff/Assets/raw/main/comfyui-reactor-node/future-0.18.3-py3-none-any.whl<br>
-- Put it to ComfyUI root And run:
+- https://github.com/Gourieff/Assets/raw/main/comfyui-reactor-node/future-0.18.3-py3-none-any.whl をダウンロード
+- ComfyUI ルートに配置して以下を実行:
 
       python_embeded\python.exe -m pip install future-0.18.3-py3-none-any.whl
 
-- Then:
+- その後:
 
       python_embeded\python.exe -m pip install basicsr
 
-### **VI. "fatal: fetch-pack: invalid index-pack output" when you try to `git clone` the repository"**
+### **VI. "fatal: fetch-pack: invalid index-pack output"（`git clone` 時）**
 
-Try to clone with `--depth=1` (last commit only):
+`--depth=1`（最新コミットのみ）でクローンを試してください:
 
      git clone --depth=1 https://github.com/Gourieff/ComfyUI-ReActor
 
-Then retrieve the rest (if you need):
+必要であれば残りを取得:
 
      git fetch --unshallow
 
-## Updating
+## 更新
 
-Just put .bat or .sh script from this [Repo](https://github.com/Gourieff/sd-webui-extensions-updater) to the `ComfyUI\custom_nodes` directory and run it when you need to check for updates
+この [リポジトリ](https://github.com/Gourieff/sd-webui-extensions-updater) の .bat または .sh スクリプトを `ComfyUI\custom_nodes` に配置し、必要に応じて実行してください。
 
-### Disclaimer
+### 免責事項
 
-This software is meant to be a productive contribution to the rapidly growing AI-generated media industry. It will help artists with tasks such as animating a custom character or using the character as a model for clothing etc.
+このソフトウェアは、急速に拡大する AI 生成メディア産業への生産的な貢献を目的としています。カスタムキャラクターのアニメーションや衣服のモデルとしての利用など、アーティストの作業を支援します。
 
-The developers of this software are aware of its possible unethical applications and are committed to take preventative measures against them. We will continue to develop this project in the positive direction while adhering to law and ethics.
+開発者は、本ソフトウェアが持つ不適切な用途を認識しており、それを防ぐための対策に取り組んでいます。法と倫理に従い、ポジティブな方向でプロジェクトを継続します。
 
-Users of this software are expected to use this software responsibly while abiding the local law. If face of a real person is being used, users are suggested to get consent from the concerned person and clearly mention that it is a deepfake when posting content online. **Developers and Contributors of this software are not responsible for actions of end-users.**
+ユーザーは、地域の法律に従い、責任を持って本ソフトウェアを使用する必要があります。実在人物の顔を使用する場合は、関係者の同意を得て、オンライン投稿時にはディープフェイクであることを明記してください。**本ソフトウェアの開発者および貢献者は、エンドユーザーの行為に責任を負いません。**
 
-By using this extension you are agree not to create any content that:
-- violates any laws;
-- causes any harm to a person or persons;
-- propagates (spreads) any information (both public or personal) or images (both public or personal) which could be meant for harm;
-- spreads misinformation;
-- targets vulnerable groups of people.
+本拡張を使用することで、次のようなコンテンツを作成しないことに同意したものとみなされます:
+- 法律に違反する内容
+- 人に危害を加える内容
+- 害意を伴う情報（公的・私的を問わず）や画像（公的・私的を問わず）の拡散
+- 誤情報の拡散
+- 脆弱な人々を標的にすること
 
-This software utilizes the pre-trained models `buffalo_l` and `inswapper_128.onnx`, which are provided by [InsightFace](https://github.com/deepinsight/insightface/). These models are included under the following conditions:
+本ソフトウェアは、[InsightFace](https://github.com/deepinsight/insightface/) が提供する学習済みモデル `buffalo_l` と `inswapper_128.onnx` を使用しています。これらのモデルは以下の条件に従って提供されます:
 
-[From insighface license](https://github.com/deepinsight/insightface/tree/master/python-package): The InsightFace’s pre-trained models are available for non-commercial research purposes only. This includes both auto-downloading models and manually downloaded models.
+[insightface ライセンスより](https://github.com/deepinsight/insightface/tree/master/python-package): InsightFace の学習済みモデルは非商用の研究目的にのみ利用可能です。自動ダウンロード、手動ダウンロードのどちらも対象です。
 
-Users of this software must strictly adhere to these conditions of use. The developers and maintainers of this software are not responsible for any misuse of InsightFace’s pre-trained models.
+ユーザーはこれらの利用条件を厳守する必要があります。本ソフトウェアの開発者・メンテナーは、InsightFace の学習済みモデルの誤用に責任を負いません。
 
-Please note that if you intend to use this software for any commercial purposes, you will need to train your own models or find models that can be used commercially.
+商用利用を意図する場合は、自分でモデルを学習するか、商用利用可能なモデルを入手してください。
 
-### Models Hashsum
+### モデルのハッシュ
 
-#### Safe-to-use models have the following hash:
+#### 安全に使用できるモデルのハッシュは以下の通りです:
 
 inswapper_128.onnx
 ```
@@ -508,14 +533,14 @@ MD5:80248d427976241cbd1343889ed132b3
 SHA256:4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43
 ```
 
-**Please check hashsums if you download these models from unverified (or untrusted) sources**
+**未検証（信頼できない）ソースからモデルをダウンロードした場合は、必ずハッシュを確認してください。**
 
 <a name="credits">
 
-## Thanks and Credits
+## 感謝とクレジット
 
 <details>
-	<summary><a>Click to expand</a></summary>
+	<summary><a>クリックして展開</a></summary>
 
 <br>
 
@@ -531,15 +556,15 @@ SHA256:4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43
 [BasicSR](https://github.com/XPixelGroup/BasicSR) - [@XPixelGroup](https://github.com/XPixelGroup) <br>
 [facexlib](https://github.com/xinntao/facexlib) - [@xinntao](https://github.com/xinntao) <br>
 
-[@s0md3v](https://github.com/s0md3v), [@henryruhs](https://github.com/henryruhs) - the original Roop App <br>
-[@ssitu](https://github.com/ssitu) - the first version of [ComfyUI_roop](https://github.com/ssitu/ComfyUI_roop) extension
+[@s0md3v](https://github.com/s0md3v), [@henryruhs](https://github.com/henryruhs) - 元の Roop アプリ <br>
+[@ssitu](https://github.com/ssitu) - [ComfyUI_roop](https://github.com/ssitu/ComfyUI_roop) 拡張の初期バージョン
 
 </details>
 
 <a name="note">
 
-### Note!
+### 注意!
 
-**If you encounter any errors when you use ReActor Node - don't rush to open an issue, first try to remove current ReActor node in your workflow and add it again**
+**ReActor ノード使用時にエラーが起きた場合、すぐに Issue を立てるのではなく、ワークフロー内の ReActor ノードを一度削除して再追加してみてください。**
 
-**ReActor Node gets updates from time to time, new functions appear and old node can work with errors or not work at all**
+**ReActor ノードは随時更新され、新機能が追加されるため、古いノードは動作不良になることがあります。**
