@@ -33,11 +33,11 @@
 
   English | [Русский](/README_RU.md)
 
-# ReActor Nodes for ComfyUI<br><sub><sup>-=SFW-Friendly=-</sup></sub>
+# ReActor Nodes for ComfyUI
 
 </div>
 
-### The Fast and Simple Face Swap Extension Nodes for ComfyUI, based on [blocked ReActor](https://web.archive.org/web/20241230084620/https://github.com/Gourieff/comfyui-reactor-node) - now it has a nudity detector to avoid using this software with 18+ content
+### The Fast and Simple Face Swap Extension Nodes for ComfyUI, based on [blocked ReActor](https://web.archive.org/web/20241230084620/https://github.com/Gourieff/comfyui-reactor-node)
 
 > By using this Node you accept and assume [responsibility](#disclaimer)
 
@@ -96,7 +96,7 @@
 - MaskHelper node 2x speed up - not perfect yet but 1.5x-2x faster then before
 - ComfyUI native ProgressBar for different steps
 - ORIGINAL_IMAGE output for main nodes
-- Different fixes and improvements (https://github.com/Gourieff/ComfyUI-ReActor/issues/25 fix; no tmp file for NSFW detector; NSFW detector little speed up)
+- Different fixes and improvements (https://github.com/Gourieff/ComfyUI-ReActor/issues/25 fix)
 
 ### 0.6.0
 
@@ -124,7 +124,6 @@ You can download ReSwapper models here:
 https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models
 Just put them into the "models/reswapper" directory.
 
-- NSFW-detector to not violate [GitHub rules](https://docs.github.com/en/site-policy/acceptable-use-policies/github-misinformation-and-disinformation#synthetic--manipulated-media-tools)
 - New node "Unload ReActor Models" - is useful for complex WFs when you need to free some VRAM utilized by ReActor
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.2-whatsnew-01.jpg?raw=true" alt="0.5.2-whatsnew-01" width="100%"/>
