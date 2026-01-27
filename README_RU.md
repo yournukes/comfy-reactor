@@ -33,11 +33,11 @@
 
   [English](/README.md) | Русский
 
-# ReActor Nodes для ComfyUI<br><sub><sup>-=Безопасно для работы | SFW-Friendly=-</sup></sub>
+# ReActor Nodes для ComfyUI
 
 </div>
 
-### Ноды (nodes) для быстрой и простой замены лиц на любых изображениях для работы с ComfyUI, основан на [ранее заблокированном РеАкторе](https://web.archive.org/web/20241126185020/https://github.com/Gourieff/comfyui-reactor-node/blob/main/README_RU.md) - теперь имеется встроенный NSFW-детектор, исключающий замену лиц на изображениях с контентом 18+
+### Ноды (nodes) для быстрой и простой замены лиц на любых изображениях для работы с ComfyUI, основан на [ранее заблокированном РеАкторе](https://web.archive.org/web/20241126185020/https://github.com/Gourieff/comfyui-reactor-node/blob/main/README_RU.md)
 
 > Используя данное ПО, вы понимаете и принимаете [ответственность](#disclaimer)
 
@@ -96,7 +96,7 @@
 - MaskHelper нод теперь почти вдвое быстрее - пока не идеально, но лучше, чем было ранее
 - Нативный ProgressBar ComfyUI для разных шагов
 - Добавлен выход ORIGINAL_IMAGE для основных нодов
-- Разные исправления и улучшения (https://github.com/Gourieff/ComfyUI-ReActor/issues/25 фикс; временные файлы для NSFW детектора больше не создаются; NSFW детектор стал работать немного быстрее)
+- Разные исправления и улучшения (https://github.com/Gourieff/ComfyUI-ReActor/issues/25 фикс)
 
 ### 0.6.0
 
@@ -124,7 +124,6 @@
 https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models
 Сохраните их в директорию "models/reswapper".
 
-- NSFW-детектор, чтобы не нарушать [правила GitHub](https://docs.github.com/en/site-policy/acceptable-use-policies/github-misinformation-and-disinformation#synthetic--manipulated-media-tools)
 - Новый нод "Unload ReActor Models" - полезен для сложных воркфлоу, когда вам нужно освободить ОЗУ, занятую РеАктором
 
 <img src="https://github.com/Gourieff/Assets/blob/main/comfyui-reactor-node/0.5.2-whatsnew-01.jpg?raw=true" alt="0.5.2-whatsnew-01" width="100%"/>
