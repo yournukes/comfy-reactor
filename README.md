@@ -288,7 +288,7 @@ ImpactPack の "Make Image Batch" ノードを ReActor の入力に接続し、�
 2. 2 つの方法のいずれかを選択:
    - (ComfyUI Manager) ComfyUI Manager を開き、「Install Custom Nodes」をクリック。検索欄に「ReActor」を入力して「Install」。完了後、サーバーを再起動。
    - (手動) `ComfyUI\custom_nodes` に移動し、コンソールで `git clone https://github.com/Gourieff/ComfyUI-ReActor` を実行
-3. `ComfyUI\custom_nodes\ComfyUI-ReActor` に移動し、`install.bat` を実行
+3. `ComfyUI\custom_nodes\ComfyUI-ReActor` に移動し、`install.bat` を実行（ComfyUI の `python_embeded` または `venv` の Python を使用）
 4. "face_yolov8m.pt" Ultralytics モデルがない場合は [Assets](https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/detection/bbox/face_yolov8m.pt) からダウンロードして `ComfyUI\models\ultralytics\bbox` に配置してください。<br>同様に "Sams" モデルのいずれか（または両方）を [こちら](https://huggingface.co/datasets/Gourieff/ReActor/tree/main/models/sams) からダウンロードし、`ComfyUI\models\sams` に配置してください。
 5. ComfyUI を起動し、メニュー `ReActor` または検索欄から ReActor ノードを探します。
 
