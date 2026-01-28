@@ -1,10 +1,13 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: Try to use embedded python first
+:: Try to use ComfyUI embedded/venv python first
 if exist ..\..\..\python_embeded\python.exe (
     :: Use the embedded python
     set PYTHON=..\..\..\python_embeded\python.exe
+) else if exist ..\..\..\venv\Scripts\python.exe (
+    :: Use the venv python
+    set PYTHON=..\..\..\venv\Scripts\python.exe
 ) else (
     :: Embedded python not found, check for python in the PATH
     for /f "tokens=* USEBACKQ" %%F in (`python --version 2^>^&1`) do (

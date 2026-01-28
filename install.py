@@ -3,6 +3,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 import subprocess
 import os, sys
+from pathlib import Path
 try:
     from pkg_resources import get_distribution as distributions
 except:
@@ -13,7 +14,6 @@ from packaging import version as pv
 try:
     from folder_paths import models_dir
 except:
-    from pathlib import Path
     models_dir = os.path.join(Path(__file__).parents[2], "models")
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
@@ -24,6 +24,23 @@ model_url = "https://huggingface.co/datasets/Gourieff/ReActor/resolve/main/model
 model_name = os.path.basename(model_url)
 models_dir_path = os.path.join(models_dir, "insightface")
 model_path = os.path.join(models_dir_path, model_name)
+
+def log_python_environment():
+    exe_path = Path(sys.executable).resolve()
+    comfy_root = Path(__file__).resolve().parents[2]
+    expected_paths = [
+        comfy_root / "python_embeded" / "python.exe",
+        comfy_root / "venv" / "Scripts" / "python.exe",
+    ]
+    expected_resolved = [path.resolve() for path in expected_paths if path.exists()]
+    print(f"[ReActor] Python executable: {exe_path}")
+    if expected_resolved and exe_path not in expected_resolved:
+        print("[ReActor] Warning: install.py is not running with ComfyUI's Python.")
+        print("[ReActor] Please run install.bat or use ComfyUI's embedded/venv python.exe.")
+    elif not expected_resolved:
+        print("[ReActor] Warning: ComfyUI embedded/venv Python was not found to verify the path.")
+
+log_python_environment()
 
 def run_pip(*args):
     subprocess.run([sys.executable, "-m", "pip", "install", "--no-warn-script-location", *args])
